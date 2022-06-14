@@ -557,6 +557,9 @@ class ViewController: UIViewController {
     
     @objc func backspaceTapFunc () -> Void {
         print("backspaceTap")
+        mainLabel.text = String((mainLabel.text?.dropLast()) ?? "")
+                   resultLabel.text = String((resultLabel.text?.dropLast()) ?? "")
+                   newNumber = Double(mainLabel.text ?? "") ?? 0
     }
     //MARK: Navigation 
     @objc func currencyFunc() {
@@ -573,7 +576,7 @@ class ViewController: UIViewController {
     
         if performingMath == true
         {
-            self.mainLabel.text = String(sender.view?.largeContentTitle ?? "0")
+            self.mainLabel.text = String(sender.view?.largeContentTitle ?? "")
             self.newNumber = Double(self.mainLabel.text!)!
             self.resultLabel.text = resultLabel.text! + mainLabel.text!
             performingMath = false
@@ -581,7 +584,7 @@ class ViewController: UIViewController {
         }
         else
         {
-            self.mainLabel.text = self.mainLabel.text! + String(sender.view?.largeContentTitle ?? "0")
+            self.resultLabel.text = self.resultLabel.text! + String(sender.view?.largeContentTitle ?? "0")
             if let num = Double(mainLabel.text ?? "") {
                 newNumber = num
             }
@@ -592,37 +595,38 @@ class ViewController: UIViewController {
     @objc func allDeleteFunc(sender: UITapGestureRecognizer) {
         print(sender.view?.largeContentTitle ?? "error")
        
-        self.previousNumber = Double(mainLabel.text ?? "") ?? 0
-//        if self.previousNumber != nil {
-//            self.previousNumber = Double(mainLabel.text ?? "")!
-//        } else {
-//            let alert = UIAlertController(title: "error", message: "лищняя операция", preferredStyle: .alert)
-//            let act = UIAlertAction(title: "Ok", style: .default)
-//            alert.addAction(act)
-//            self.present(alert, animated: true)
-//        }
+        self.previousNumber = Double(resultLabel.text ?? "") ?? 0
+//
         if sender.view?.largeContentTitle == "C"  {
             mainLabel.text = "0"
             resultLabel.text = ""
         } else if sender.view?.largeContentTitle == "()" {
-            mainLabel.text = ("(\(resultLabel.text ?? ""))")
+            mainLabel.text = "()"
+            resultLabel.text = ("(\(resultLabel.text ?? ""))")
         } else if sender.view?.largeContentTitle == "%" {
             mainLabel.text = "%"
+            resultLabel.text = (resultLabel.text ?? "") + "%"
         } else if sender.view?.largeContentTitle == "÷" {
-            mainLabel.text = (resultLabel.text ?? "") + "÷"
+            mainLabel.text = "÷"
+            resultLabel.text = (resultLabel.text ?? "") + "÷"
         } else if sender.view?.largeContentTitle == "×" {
-            mainLabel.text = (resultLabel.text ?? "") + "×"
+            mainLabel.text = "×"
+            resultLabel.text = (resultLabel.text ?? "") + "×"
         } else if sender.view?.largeContentTitle == "-" {
-            mainLabel.text = (resultLabel.text ?? "") + "-"
+            mainLabel.text = "-"
+            resultLabel.text = (resultLabel.text ?? "") + "-"
         } else if sender.view?.largeContentTitle == "+" {
-            mainLabel.text = (resultLabel.text ?? "") + "+"
+            mainLabel.text = "+"
+            resultLabel.text = (resultLabel.text ?? "") + "+"
         }
         if sender.view?.largeContentTitle == "+/-" {
-            mainLabel.text = "-" + (resultLabel.text ?? "")
-            previousNumber = Double(mainLabel.text!)!
+            mainLabel.text =  "-" + mainLabel.text!
+            resultLabel.text = "-" + (resultLabel.text ?? "")
+            previousNumber = Double(resultLabel.text ?? "") ?? 0
         }
         if sender.view?.largeContentTitle == "." {
-            mainLabel.text = (resultLabel.text ?? "") + "."
+            mainLabel.text = mainLabel.text! + "."
+            resultLabel.text = (resultLabel.text ?? "") + "."
             newNumber = Double(mainLabel.text!)!
         }
         self.operation = sender.view?.largeContentTitle ?? ""
@@ -635,15 +639,15 @@ class ViewController: UIViewController {
         if sender.view?.largeContentTitle == "=" {
             print(operation)
             if operation == "÷" {
-                mainLabel.text = String(previousNumber / newNumber)
+                resultLabel.text = String(previousNumber / newNumber)
             } else if operation == "×" {
-                mainLabel.text = String(previousNumber * newNumber)
+                resultLabel.text = String(previousNumber * newNumber)
             } else if operation == "-" {
-                mainLabel.text = String(previousNumber - newNumber)
+                resultLabel.text = String(previousNumber - newNumber)
             } else if operation == "+" {
-                mainLabel.text = String(previousNumber + newNumber)
+                resultLabel.text = String(previousNumber + newNumber)
             }else if operation == "%" {
-                mainLabel.text = String(previousNumber / 100)
+                resultLabel.text = String((previousNumber * newNumber) / 100)
             } else if operation == "C" {
                 mainLabel.text = ""
                 previousNumber = 0
